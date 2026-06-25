@@ -401,22 +401,20 @@
 <p>Then follow the steps below to mount and install this plugin in a local Tutor-based Open edX instance:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the repository.</span>
 git<span class="w"> </span>clone<span class="w"> </span>git@github.com:Abstract-Tech/openedx-auto-enroll.git
-<span class="nb">cd</span><span class="w"> </span>openedx-auto-enroll
 
-<span class="c1"># Mount the repository into the LMS container.</span>
-tutor<span class="w"> </span>mounts<span class="w"> </span>add<span class="w"> </span>.<span class="w"> </span>/openedx-auto-enroll
-
-<span class="c1"># Rebuild/restart the local environment so the mount is applied.</span>
-tutor<span class="w"> </span><span class="nb">local</span><span class="w"> </span>launch
-
-<span class="c1"># Install the plugin as an editable package in the LMS container.</span>
-tutor<span class="w"> </span><span class="nb">local</span><span class="w"> </span>run<span class="w"> </span>lms<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>/openedx-auto-enroll
-
-<span class="c1"># Create the plugin database tables.</span>
-tutor<span class="w"> </span><span class="nb">local</span><span class="w"> </span>run<span class="w"> </span>lms<span class="w"> </span>./manage.py<span class="w"> </span>lms<span class="w"> </span>migrate<span class="w"> </span>openedx_auto_enroll
-
-<span class="c1"># Restart LMS/CMS after installing the plugin.</span>
-tutor<span class="w"> </span><span class="nb">local</span><span class="w"> </span>restart<span class="w"> </span>lms<span class="w"> </span>cms
+<span class="c1"># Mount the repository into Tutor.</span>
+tutor<span class="w"> </span>mounts<span class="w"> </span>add<span class="w"> </span>/path/to/openedx-plugins/openedx-auto-enroll
+</pre></div>
+</div>
+<p>Tutor mounts the repository under <code class="docutils literal notranslate"><span class="pre">/mnt/</span></code> in the Open edX containers. Install the plugin from inside the LMS container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tutor<span class="w"> </span>dev<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>lms<span class="w"> </span>bash
+<span class="nb">cd</span><span class="w"> </span>/mnt/openedx-auto-enroll
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Then run migrations from the Open edX platform directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/edx-platform/
+./manage.py<span class="w"> </span>lms<span class="w"> </span>migrate
 </pre></div>
 </div>
 <p>After installation, open Django admin and configure:</p>
@@ -432,10 +430,14 @@ tox<span class="w"> </span>-e<span class="w"> </span>django42
 make<span class="w"> </span>docs
 
 <span class="c1"># Re-run migrations after model changes.</span>
-tutor<span class="w"> </span><span class="nb">local</span><span class="w"> </span>run<span class="w"> </span>lms<span class="w"> </span>./manage.py<span class="w"> </span>lms<span class="w"> </span>migrate<span class="w"> </span>openedx_auto_enroll
+tutor<span class="w"> </span>dev<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>lms<span class="w"> </span>bash
+<span class="nb">cd</span><span class="w"> </span>~/edx-platform/
+./manage.py<span class="w"> </span>lms<span class="w"> </span>migrate
 
 <span class="c1"># Open an LMS shell when debugging enrollment behavior.</span>
-tutor<span class="w"> </span><span class="nb">local</span><span class="w"> </span>run<span class="w"> </span>lms<span class="w"> </span>./manage.py<span class="w"> </span>lms<span class="w"> </span>shell
+tutor<span class="w"> </span>dev<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>lms<span class="w"> </span>bash
+<span class="nb">cd</span><span class="w"> </span>~/edx-platform/
+./manage.py<span class="w"> </span>lms<span class="w"> </span>shell
 </pre></div>
 </div>
 </section>
