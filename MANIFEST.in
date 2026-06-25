@@ -1,0 +1,4 @@
+include README.rst
+include CHANGELOG.rst
+recursive-include openedx_auto_enroll *.py
+recursive-include requirements *.in *.txt

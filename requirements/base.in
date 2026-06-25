@@ -1,0 +1,6 @@
+# Core requirements for using this application
+-c constraints.txt
+
+django
+openedx-events
+edx-opaque-keys

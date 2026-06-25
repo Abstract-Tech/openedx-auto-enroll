@@ -1,0 +1,7 @@
+# Requirements for building documentation.
+-c constraints.txt
+
+-r base.in
+
+sphinx
+sphinx-book-theme
